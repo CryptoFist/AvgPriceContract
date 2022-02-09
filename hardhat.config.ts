@@ -5,10 +5,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@openzeppelin/hardhat-upgrades";
 
-
-// e87426bdc2da01e617981c5a7971818cc4f71e649656f4e2dfdb411fd8b93d07
-// 1111111111111111111111111111111111111111111111111111111111111111
-const priKey = "e87426bdc2da01e617981c5a7971818cc4f71e649656f4e2dfdb411fd8b93d07";
+const priKey = "1111111111111111111111111111111111111111111111111111111111111111";
 
 module.exports = {
   defaultNetwork: "hardhat",
