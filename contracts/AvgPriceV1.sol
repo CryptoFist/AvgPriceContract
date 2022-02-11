@@ -2,18 +2,18 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./DateTime.sol";
 import "hardhat/console.sol";
+import "./Diamond/libraries/LibDiamond.sol";
 
-contract AvgPriceV1 is OwnableUpgradeable {
+contract AvgPriceV1 {
 
-    DateTime private dateUtil;
-    mapping(uint8 => mapping(uint8 => uint256)) private dailyPrice;
-    mapping(uint8 => mapping(uint8 => uint256)) private totalPrice;
+    DateTime internal dateUtil;
+    mapping(uint8 => mapping(uint8 => uint256)) internal dailyPrice;
+    mapping(uint8 => mapping(uint8 => uint256)) internal totalPrice;
 
-    function initialize(address _address) public initializer {
-        __Ownable_init();
+    function setDateUtilAddress (address _address) external {
+        LibDiamond.enforceIsContractOwner();
         dateUtil = DateTime(_address);
     }
 
@@ -33,7 +33,8 @@ contract AvgPriceV1 is OwnableUpgradeable {
         uint8 _month, 
         uint8 _day,
         uint256 _price
-    ) external onlyValidDate(_month, _day) {
+    ) external virtual onlyValidDate(_month, _day) {
+        console.log("Version1 setDayPrice function");
         dailyPrice[_month][_day] = _price;
         totalPrice[_month][_day] = prevTotalPrice(_month, _day) + _price;
     }
@@ -74,7 +75,7 @@ contract AvgPriceV1 is OwnableUpgradeable {
     function prevTotalPrice(
         uint8 _curMonth,
         uint8 _curDay
-    ) private view returns (uint256 _totalPrice) {
+    ) internal view returns (uint256 _totalPrice) {
         if (_curMonth == 1 && _curDay == 1) {
             _totalPrice = 0;
         } else {
